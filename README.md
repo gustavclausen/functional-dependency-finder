@@ -4,13 +4,14 @@ Simple CLI-program - written in Python - used to find potential functional depen
 Useful tool during normalization of a relational database.
 
 ## Overview
-The program connects to a MySQL-database of your choice, and scans each table for functional dependencies by its columns and thereby instances as mentioned.
+The program connects to a MySQL-database of your choice, and scans each table for functional dependencies by its columns and thereby instances as mentioned.  
+The results are written to output.
 
 ### Assumptions about relations and data
-* Tables (relations) are considered in isolation (hence no foreign keys are considered).
+* Tables (relations) are considered in isolation (hence no relationships are considered).
 * All functional dependencies are found only by checking with one column on each side, such as A -> B.
-* If one functional dependency holds for an instance, we assume that it hold for all instances of the relation.  
-``Exception``: When an ID-column and a corresponding string-column both determine each other, we only consider the ID-column determines the string-column, not vice versa.
+* If one functional dependency holds for an instance, it's assumed that it hold for all instances of the relation.  
+``Exception``: When an ID-column and a corresponding string-column both determine each other, it's only considered the ID-column determines the string-column, not vice versa.
 
 ## Usage
 To install:
