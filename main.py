@@ -50,7 +50,7 @@ def get_description_of_table(db_connection, table_name):
 def find_func_depend_in_table(db_connection, table_name):
     table_description = get_description_of_table(db_connection, table_name)
     fields = table_description['fields']
-    cursor = db_connection.cursor()
+    cursor = db_connection.cursor(buffered=True)
     
     func_depends = []
     for i in tqdm(range(0, len(fields)), desc=f'Current table ({table_name})'):
@@ -58,12 +58,11 @@ def find_func_depend_in_table(db_connection, table_name):
             field_1 = fields[i]
             field_2 = fields[j]
             
-            cursor.execute(f'SELECT COUNT(*) FROM {table_name} t1, {table_name} t2 WHERE t1.{field_1} = t2.{field_1} AND t1.{field_2} <> t2.{field_2}')
-            count_of_results = cursor.fetchone()[0]
-            
+            cursor.execute(f'SELECT {field_1}, COUNT(DISTINCT {field_2}) c FROM {table_name} GROUP BY {field_1} HAVING c > 1')
+
             # Functional dependency found: it's not the case that there's more than one value (field_2)
             # associated with field_1
-            if (count_of_results == 0):
+            if (cursor.rowcount == 0):
                 func_depends.append(f'{field_1} -> {field_2}')
     
     # Print results
@@ -100,7 +99,7 @@ if __name__ == '__main__':
 
     try:
         for table in tqdm(list(get_name_of_tables(db_connection)), desc='Overall progress'):
-            tqdm.write(f'Now analyzing table \'{table}\'...')
+            tqdm.write(f'\nNow analyzing table \'{table}\'...')
             find_func_depend_in_table(db_connection, table)
 
     finally:
