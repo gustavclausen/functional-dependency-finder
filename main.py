@@ -74,9 +74,12 @@ def find_func_depend_in_table(db_connection, table_name):
     # Print results
     tqdm.write(f'\n### Results for \'{table_name}\' ###')
     tqdm.write('Primary key(s) in table: ' + ', '.join(map(str, table_description['primary_keys'])))
-    tqdm.write('Following functional dependencies found:')
-    for fd in func_depends:
-        tqdm.write(fd)
+    if func_depends:
+        tqdm.write('Following functional dependencies found:')
+        for fd in func_depends:
+            tqdm.write(fd)
+    else:
+        tqdm.write('No functional dependencies found.')
 
 
 class Password:
