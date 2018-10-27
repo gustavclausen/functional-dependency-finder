@@ -33,15 +33,19 @@ def get_name_of_tables(db_connection):
 def get_description_of_table(db_connection, table_name):
     cursor = db_connection.cursor(dictionary=True)
     cursor.execute(f'DESCRIBE {table_name}')
+    result = cursor.fetchall()
+
+    if not result:
+        raise Error(f'Table {table_name} couldn\'t be found.')
 
     fields = []
     primary_keys = []
 
-    for row in cursor:
+    for row in result:
         field = row['Field']
         fields.append(field)
         
-        if (row['Key'] == 'PRI'): # Check if field is primary key in table
+        if row['Key'] == 'PRI': # Check if field is primary key in table
             primary_keys.append(field)
     
     return {'fields': fields, 'primary_keys': primary_keys}
@@ -51,7 +55,9 @@ def find_func_depend_in_table(db_connection, table_name):
     table_description = get_description_of_table(db_connection, table_name)
     fields = table_description['fields']
     cursor = db_connection.cursor(buffered=True)
-    
+
+    tqdm.write(f'\nNow analyzing table \'{table_name}\'...')
+
     func_depends = []
     for i in tqdm(range(0, len(fields)), desc=f'Current table ({table_name})'):
         for j in tqdm(range(i + 1, len(fields)), desc=f'Current field'):
@@ -93,14 +99,19 @@ if __name__ == '__main__':
     parser.add_argument('database', action='store', type=str, help='Name of database')
     parser.add_argument('-u', '--user', help='Database user', default=getpass.getuser())
     parser.add_argument('-p', '--password', type=Password, help='Password to database', default=Password.DEFAULT)
+    parser.add_argument('-t','--tables', nargs='+', help='Pick which tables to examine', default='all')
     args = parser.parse_args()
 
     db_connection = establish_db_connection(args.host, args.database, args.user, str(args.password))
 
     try:
-        for table in tqdm(list(get_name_of_tables(db_connection)), desc='Overall progress'):
-            tqdm.write(f'\nNow analyzing table \'{table}\'...')
+        tables_to_examine = list(get_name_of_tables(db_connection)) if args.tables == 'all' else args.tables
+
+        for table in tqdm(tables_to_examine, desc='Overall progress'):
             find_func_depend_in_table(db_connection, table)
+    
+    except Error as err:
+        sys.exit(f'An error occurred:\n{err}\nExiting...')
 
     finally:
         db_connection.close()

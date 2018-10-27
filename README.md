@@ -21,7 +21,8 @@ python setup.py install
 
 Run configuration:
 ```
-usage: main.py [-h] host database [-u USER] [-p PASSWORD]
+usage: main.py [-h] [-u USER] [-p PASSWORD] [-t TABLES [TABLES ...]]
+               host database
 
 positional arguments:
   host                  Host running MySQL-database (e.g. localhost)
@@ -31,5 +32,8 @@ optional arguments:
   -h, --help            show this help message and exit
   -u USER, --user USER  Database user (default: <name of logged-in user>)
   -p PASSWORD, --password PASSWORD
-                        Password to database (default: Prompt if not specified.)
+                        Password to database (default: Prompt if not
+                        specified.)
+  -t TABLES [TABLES ...], --tables TABLES [TABLES ...]
+                        Pick which tables to examine (default: all)
 ```
