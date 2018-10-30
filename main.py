@@ -60,7 +60,10 @@ def find_func_depend_in_table(db_connection, table_name):
 
     func_depends = []
     for i in tqdm(range(0, len(fields)), desc=f'Current table ({table_name})'):
-        for j in tqdm(range(i + 1, len(fields)), desc=f'Current field'):
+        for j in tqdm(range(0, len(fields)), desc=f'Current field'):
+            if (i == j):
+                continue
+
             field_1 = fields[i]
             field_2 = fields[j]
             
