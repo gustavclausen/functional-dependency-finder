@@ -42,5 +42,5 @@ optional arguments:
 
 Run configuration example:
 ```
-python main.py localhost MyDatabase -u myuser -p topsecretpassword123 -t Table1 Tables2
+python main.py localhost MyDatabase -u myuser -p topsecretpassword123 -t Table1 Table2
 ```
