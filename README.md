@@ -11,7 +11,6 @@ The results are written to output.
 * Tables (relations) are considered in isolation (hence no relationships are considered).
 * All functional dependencies are found only by checking with one column on each side, such as A -> B.
 * If one functional dependency holds for an instance, it's assumed that it hold for all instances of the relation.  
-**Exception**: When an ID-column and a corresponding string-column both determine each other, it's only considered the ID-column determines the string-column, not vice versa. Please note that these functional dependencies are STILL printed to the output.
 
 ## Requirements
 * Python v. 3.6 <
@@ -39,4 +38,9 @@ optional arguments:
                         specified.)
   -t TABLES [TABLES ...], --tables TABLES [TABLES ...]
                         Pick which tables to examine (default: all)
+```
+
+Run configuration example:
+```
+python main.py localhost MyDatabase -u myuser -p topsecretpassword123 -t Table1 Tables2
 ```
