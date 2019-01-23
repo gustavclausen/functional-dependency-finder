@@ -1,6 +1,6 @@
 # functional-dependency-finder
 ## Purpose
-Simple CLI-program - written in Python - used to find potential functional dependencies from instances of a relation in a MySQL database.  
+Simple CLI-program used to find potential functional dependencies from instances of a relation in a MySQL database.  
 Useful tool during normalization of a relational database.
 
 ## Overview
@@ -8,12 +8,12 @@ The program connects to a MySQL-database of your choice, and scans each table fo
 The results are written to output.
 
 ### Assumptions about relations and data
-* Tables (relations) are considered in isolation (hence no relationships are considered).
+* Relations are considered in isolation (hence no relationships are considered).
 * All functional dependencies are found only by checking with one column on each side, such as A -> B.
-* If one functional dependency holds for an instance, it's assumed that it hold for all instances of the relation.  
+* If one functional dependency holds for an instance, it's assumed that it holds for all instances of the relation.  
 
 ## Requirements
-* Python v. 3.6 <
+* Python 3.6 <
 
 ## Usage
 To install:
